@@ -1,0 +1,4 @@
+Explain concepts clearly and logically.
+Avoid unnecessary complexity.
+Use examples where helpful.
+Assume the learner wants understanding, not just facts.

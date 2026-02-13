@@ -1,0 +1,125 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+    padding: 20px;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+    color: var(--accent-cyan);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: none !important;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-form textarea {
+    min-height: 250px;
+    background: rgba(13, 33, 51, 0.5);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    color: #fff;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+}
+
+.modal-form textarea:focus {
+    border-color: var(--accent-cyan);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.cancel-btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.save-btn {
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    background: var(--accent-cyan);
+    border: none;
+    color: #000;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0;
+    }
+
+    .modal-content {
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-form {
+        flex: 1;
+    }
+
+    .modal-form textarea {
+        flex: 1;
+    }
+}
