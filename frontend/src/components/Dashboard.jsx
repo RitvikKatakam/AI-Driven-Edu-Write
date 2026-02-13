@@ -273,19 +273,10 @@ const Dashboard = ({ user, onLogout }) => {
                     </div>
                 </div>
 
-                <div className="sidebar-footer">
-                    <div className="account-status-box">
-                        <div className="label">Account Status</div>
-                        <div className="status-row">
-                            <span>Credits</span>
-                            <span className="status-value">Unlimited</span>
-                        </div>
-                    </div>
-                </div>
             </aside>
 
             {/* Main Content */}
-            <main className="main-content" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}>
+            < main className="main-content" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}>
                 <div className="tab-content-wrapper">
                     {activeTab === 'generator' ? (
                         <div className="generator-container">
@@ -293,9 +284,6 @@ const Dashboard = ({ user, onLogout }) => {
                                 {chatMessages.length === 0 ? (
                                     <div className="welcome-center">
                                         <h2>Welcome, <span>{user.name || user.email.split('@')[0]}</span></h2>
-                                        <div style={{ display: 'inline-block', padding: '4px 12px', borderRadius: '20px', background: 'rgba(0, 210, 255, 0.1)', border: '1px solid rgba(0, 210, 255, 0.2)', color: 'var(--accent-cyan)', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
-                                            ✨ Unlimited Credits Enabled
-                                        </div>
                                         <p>Ask anything to generate <span className="cyan-text">{contentType}</span> with AI</p>
                                         <div className="suggestion-chips">
                                             {['Write a short story', 'Solve a math problem', 'Explain Quantum Physics', 'Create a study plan'].map(suggestion => (
@@ -440,59 +428,61 @@ const Dashboard = ({ user, onLogout }) => {
                     ) : null}
                 </div>
 
-                {activeTab !== 'about' && (
-                    <div className="input-section-bottom">
-                        <div className="input-container">
-                            <form onSubmit={handleGenerate} className="chat-input-wrapper" style={{ position: 'relative' }}>
-                                <div className="input-action-container">
-                                    <button
-                                        type="button"
-                                        className={`input-action-btn ${isActionMenuOpen ? 'active' : ''}`}
-                                        onClick={() => setIsActionMenuOpen(!isActionMenuOpen)}
-                                    >
-                                        <span className="plus-icon">+</span>
-                                    </button>
+                {
+                    activeTab !== 'about' && (
+                        <div className="input-section-bottom">
+                            <div className="input-container">
+                                <form onSubmit={handleGenerate} className="chat-input-wrapper" style={{ position: 'relative' }}>
+                                    <div className="input-action-container">
+                                        <button
+                                            type="button"
+                                            className={`input-action-btn ${isActionMenuOpen ? 'active' : ''}`}
+                                            onClick={() => setIsActionMenuOpen(!isActionMenuOpen)}
+                                        >
+                                            <span className="plus-icon">+</span>
+                                        </button>
 
-                                    {isActionMenuOpen && (
-                                        <div className="input-action-menu">
-                                            {actionMenuItems.map((item, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className={`action-menu-item ${aiMode === item.mode ? 'active' : ''}`}
-                                                    onClick={() => {
-                                                        if (item.mode !== 'more') {
-                                                            setAiMode(item.mode);
-                                                        }
-                                                        setIsActionMenuOpen(false);
-                                                    }}
-                                                >
-                                                    <span className="action-icon">{item.icon}</span>
-                                                    <span className="action-label">{item.label}</span>
-                                                    {aiMode === item.mode && item.mode !== 'upload' && <span className="active-dot"></span>}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                                <input
-                                    type="text"
-                                    className="chat-input"
-                                    placeholder={`Ask about something for ${contentType}...`}
-                                    value={inputText}
-                                    onChange={(e) => setInputText(e.target.value)}
-                                    disabled={isGenerating}
-                                />
-                                <button type="submit" className="send-btn" disabled={isGenerating || !inputText.trim()}>
-                                    {isGenerating ? <div className="loader-small"></div> : <span className="send-icon">→</span>}
-                                </button>
-                            </form>
+                                        {isActionMenuOpen && (
+                                            <div className="input-action-menu">
+                                                {actionMenuItems.map((item, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`action-menu-item ${aiMode === item.mode ? 'active' : ''}`}
+                                                        onClick={() => {
+                                                            if (item.mode !== 'more') {
+                                                                setAiMode(item.mode);
+                                                            }
+                                                            setIsActionMenuOpen(false);
+                                                        }}
+                                                    >
+                                                        <span className="action-icon">{item.icon}</span>
+                                                        <span className="action-label">{item.label}</span>
+                                                        {aiMode === item.mode && item.mode !== 'upload' && <span className="active-dot"></span>}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        className="chat-input"
+                                        placeholder={`Ask about something for ${contentType}...`}
+                                        value={inputText}
+                                        onChange={(e) => setInputText(e.target.value)}
+                                        disabled={isGenerating}
+                                    />
+                                    <button type="submit" className="send-btn" disabled={isGenerating || !inputText.trim()}>
+                                        {isGenerating ? <div className="loader-small"></div> : <span className="send-icon">→</span>}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                )}
-            </main>
+                    )
+                }
+            </main >
 
             {/* Right Sidebar */}
-            <aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
+            < aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
                 <div className="sidebar-section">
                     <h3 className="sidebar-label">CONTENT TYPES</h3>
                     <div className="category-wrapper">
@@ -522,7 +512,7 @@ const Dashboard = ({ user, onLogout }) => {
                         </div>
                     </div>
                 </div>
-            </aside>
+            </aside >
 
             {(isSidebarOpen || isRightBarOpen) && <div className="mobile-overlay" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}></div>}
 
@@ -531,7 +521,7 @@ const Dashboard = ({ user, onLogout }) => {
                 onClose={() => setIsDocModalOpen(false)}
                 onSave={handleSaveDocument}
             />
-        </div>
+        </div >
     );
 };
 
