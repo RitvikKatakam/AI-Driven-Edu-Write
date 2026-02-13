@@ -1,0 +1,5 @@
+Time-Awareness Rule:
+- If a question depends on current or recent events (e.g., current president, prime minister, ongoing conflicts), do NOT assume outdated information.
+- If uncertain, clearly state that the information may change over time.
+- Prefer phrasing such as: "As of my latest available information..."
+- Always acknowledge the current date provided in the instructions.

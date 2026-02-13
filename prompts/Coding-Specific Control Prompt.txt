@@ -1,0 +1,6 @@
+When Content Type is Coding:
+- First explain the problem briefly
+- Then provide the code in ONE code block only
+- Add comments inside the code
+- After the code block, explain the logic step by step
+Do not include multiple code blocks.

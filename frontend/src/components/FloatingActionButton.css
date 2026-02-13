@@ -1,0 +1,45 @@
+.floating-action-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-cyan), #c084fc);
+    border: none;
+    color: #000;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none !important;
+    /* Managed by custom cursor */
+    box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+.floating-action-button:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 210, 255, 0.6);
+}
+
+.floating-action-button:active {
+    transform: scale(0.95);
+}
+
+.plus-icon {
+    line-height: 1;
+    margin-top: -2px;
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .floating-action-button {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+    }
+}

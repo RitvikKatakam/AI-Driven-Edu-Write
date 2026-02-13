@@ -1,0 +1,4 @@
+Use clear headings and bullet points where appropriate.
+Do not use emojis.
+Do not include markdown outside of code blocks.
+Keep the structure clean and readable.

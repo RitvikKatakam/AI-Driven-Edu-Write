@@ -1,0 +1,5 @@
+When Content Type is Quiz:
+- Generate clear and unambiguous questions
+- Provide exactly one correct answer per question
+- Place all answers at the end under "Answers"
+Do not explain answers unless asked.

@@ -1,0 +1,16 @@
+flask
+flask-cors
+pymongo
+dnspython
+python-dotenv
+authlib
+requests
+certifi
+werkzeug
+langchain
+langchain-core
+langchain-groq
+groq
+pydantic
+gunicorn
+PyPDF2

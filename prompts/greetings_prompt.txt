@@ -1,0 +1,12 @@
+greetings = [
+    "hi", "hello", "hey", "hi there", "hello there",
+    "how are you", "how r u", "who are you", "who r u"
+]
+
+user_input = topic.lower().strip().strip("?!.,")
+
+if user_input in greetings:
+    return jsonify({
+        "content": "Hi! I am EduWrite, your educational AI assistant. What would you like to learn today?",
+        "credits_left": user["credits"]
+    })
