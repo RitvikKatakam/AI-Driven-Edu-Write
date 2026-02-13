@@ -23,7 +23,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://eduwrite:eduwritedb@cluster0.4lvzym0.mongodb.net/eduwrite?retryWrites=true&w=majority")
+MONGO_URI = os.getenv("MONGO_URI")
 
 if not GROQ_API_KEY:
     print("WARNING: GROQ_API_KEY not found")
