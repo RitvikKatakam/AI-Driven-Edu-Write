@@ -7,6 +7,7 @@ import CustomCursor from './CustomCursor';
 import LoadingIndicator from './LoadingIndicator';
 import FloatingActionButton from './FloatingActionButton';
 import DocumentModal from './DocumentModal';
+import { LogOut } from 'lucide-react';
 
 const Dashboard = ({ user, onLogout }) => {
     const [inputText, setInputText] = useState('');
@@ -222,9 +223,14 @@ const Dashboard = ({ user, onLogout }) => {
                     <img src="/bg.png" alt="EduWrite" className="mobile-logo" />
                     <span className="brand-text">EduWrite AI</span>
                 </div>
-                <button className="mobile-menu-btn" onClick={() => setIsRightBarOpen(!isRightBarOpen)}>
-                    ⚙️
-                </button>
+                <div className="mobile-nav-right">
+                    <button className="mobile-menu-btn logout-mobile-btn" onClick={onLogout} title="Logout">
+                        <LogOut size={20} />
+                    </button>
+                    <button className="mobile-menu-btn" onClick={() => setIsRightBarOpen(!isRightBarOpen)}>
+                        ⚙️
+                    </button>
+                </div>
             </div>
 
             {/* Desktop Navbar */}
