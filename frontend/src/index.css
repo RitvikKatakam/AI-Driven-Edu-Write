@@ -1742,8 +1742,8 @@ canvas {
 
   /* Mobile Header */
   .mobile-navbar {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     padding: 0 1rem;
     height: 60px;
@@ -1755,6 +1755,13 @@ canvas {
     left: 0;
     right: 0;
     z-index: 200;
+  }
+
+  .mobile-nav-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
   }
 
   .mobile-brand {
@@ -1783,6 +1790,25 @@ canvas {
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-main);
+    transition: all 0.2s;
+    border: none;
+    cursor: none !important;
+  }
+
+  .mobile-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logout-mobile-btn {
+    color: #ff5722;
+    background: rgba(255, 87, 34, 0.1);
+  }
+
+  .logout-mobile-btn:hover {
+    background: rgba(255, 87, 34, 0.2);
+    transform: translateY(-1px);
   }
 
   /* Sidebar Drawers */
