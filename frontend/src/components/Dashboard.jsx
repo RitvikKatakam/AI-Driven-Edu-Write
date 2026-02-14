@@ -219,6 +219,7 @@ const Dashboard = ({ user, onLogout }) => {
                     ☰
                 </button>
                 <div className="brand mobile-brand">
+                    <img src="/bg.png" alt="EduWrite" className="mobile-logo" />
                     <span className="brand-text">EduWrite AI</span>
                 </div>
                 <button className="mobile-menu-btn" onClick={() => setIsRightBarOpen(!isRightBarOpen)}>
