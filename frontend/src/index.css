@@ -1697,67 +1697,202 @@ canvas {
   align-items: center;
 }
 
-@media (max-width: 768px) {
-  .desktop-only {
-    display: none;
-  }
-
-  .login-card {
-    padding: 2rem;
-    max-width: 90%;
-  }
-
-  .navbar {
-    padding: 0 1rem;
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-
-  .brand h1 {
-    font-size: 1.2rem;
-  }
-
-  .response-scroll-area {
-    padding: 1rem;
-  }
-
-  .response-display {
-    padding: 1.2rem;
-  }
-
-  .topic-title {
-    font-size: 1.2rem;
-  }
-
-  .input-section-bottom {
-    padding: 0.8rem;
-  }
-
-  .chat-input-wrapper {
-    padding: 0.5rem 0.8rem;
-  }
-
-  .welcome-center h2 {
-    font-size: 2.2rem;
+@media (max-width: 1024px) {
+  .dashboard-container {
+    grid-template-areas:
+      "nav nav"
+      "sidebar main";
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--header-height) 1fr;
   }
 
   .right-bar {
     position: fixed;
-    right: -280px;
+    right: -300px;
+    top: var(--header-height);
+    /* Changed from 0 to preserve header space */
+    bottom: 0;
+    width: 280px;
+    background: var(--bg-darker);
+    border-left: 1px solid var(--border-color);
+    z-index: 150;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+  }
+
+  .right-bar.open {
+    right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Layout Restructuring */
+  .dashboard-container {
+    display: block;
+    /* Switch from grid to block for simpler mobile flow */
+    height: 100vh;
+    padding-top: 60px;
+    /* Space for fixed mobile header */
+  }
+
+  .navbar.desktop-only {
+    display: none !important;
+  }
+
+  /* Mobile Header */
+  .mobile-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    height: 60px;
+    background: rgba(2, 11, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+  }
+
+  .mobile-brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+  }
+
+  /* Sidebar Drawers */
+  .sidebar {
+    position: fixed;
+    left: -100%;
     top: 0;
     bottom: 0;
     width: 280px;
-    transition: right 0.3s ease;
+    max-width: 85vw;
+    z-index: 300;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-darker);
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.7);
+    padding-top: 2rem;
+    /* Add top padding since header is covered */
+  }
+
+  .sidebar.mobile-open {
+    left: 0;
+  }
+
+  .right-bar {
+    top: 0;
+    /* Full height on mobile */
+    right: -100%;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 300;
+    padding-top: 4rem;
+    /* Space for close button if needed, or visual separation */
   }
 
   .right-bar.open {
     right: 0;
   }
 
-  .sidebar-mobile-header {
-    display: flex;
+  /* Main Content Area */
+  .main-content {
+    height: calc(100vh - 60px);
+    /* Subtract header height */
+    overflow: hidden;
+    /* Prevent double scrollbars */
+  }
+
+  .generator-container {
+    width: 100%;
+    padding: 0;
+  }
+
+  .response-scroll-area {
+    padding: 1rem;
+    padding-bottom: 80px;
+    /* extra space for bottom input */
+  }
+
+  /* Typography Scaling */
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.15rem !important;
+  }
+
+  p,
+  span,
+  div {
+    font-size: 0.95rem;
+  }
+
+  .welcome-center h2 {
+    font-size: 1.8rem !important;
+    line-height: 1.2;
+  }
+
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  /* Message Bubbles - More Compact */
+  .ai-message-wrapper {
+    gap: 0.75rem;
+  }
+
+  .ai-avatar-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .response-display {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .user-query-bubble {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  /* Input Area - Cleaner */
+  .input-section-bottom {
+    padding: 0.75rem;
+    background: rgba(2, 11, 18, 0.98);
+    /* Solid background for legibility */
+  }
+
+  .chat-input-wrapper {
+    padding: 0.35rem 0.75rem;
+  }
+
+  /* Hide extra desktop elements */
+  .desktop-only {
+    display: none !important;
   }
 }
 

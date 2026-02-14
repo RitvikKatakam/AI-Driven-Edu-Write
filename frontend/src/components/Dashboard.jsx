@@ -218,6 +218,12 @@ const Dashboard = ({ user, onLogout }) => {
                 <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                     ☰
                 </button>
+                <div className="brand mobile-brand">
+                    <span className="brand-text">EduWrite AI</span>
+                </div>
+                <button className="mobile-menu-btn" onClick={() => setIsRightBarOpen(!isRightBarOpen)}>
+                    ⚙️
+                </button>
             </div>
 
             {/* Desktop Navbar */}
