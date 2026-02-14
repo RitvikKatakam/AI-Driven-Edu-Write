@@ -1758,10 +1758,19 @@ canvas {
   }
 
   .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--accent-cyan);
     letter-spacing: 0.5px;
+  }
+
+  .mobile-logo {
+    height: 28px;
+    width: auto;
+    display: block;
   }
 
   .mobile-menu-btn {
