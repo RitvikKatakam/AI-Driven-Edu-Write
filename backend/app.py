@@ -20,7 +20,9 @@ from langchain_core.messages import SystemMessage, HumanMessage
 # =============================
 # CONFIG
 # =============================
-load_dotenv()
+# explicitly load from .env in the same directory as this file
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path=env_path, override=True)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 MONGO_URI = os.getenv("MONGO_URI")
@@ -257,7 +259,7 @@ def generate():
             else:
                 return jsonify({"error": "User not found."}), 404
         # AI Parameters based on Mode
-        max_tokens = 2000
+        max_tokens = 8192
         temperature = 0.2
         model = "llama-3.3-70b-versatile"
         mode_instruction = ""
@@ -267,11 +269,11 @@ def generate():
             temperature = 0.1
             mode_instruction = "Be extremely concise, brief, and to the point. Minimal tokens used."
         elif mode == 'deep':
-            max_tokens = 4096
+            max_tokens = 8192
             temperature = 0.3
             mode_instruction = "Provide a very detailed, multi-step, and structured response with deep reasoning."
         elif mode == 'thinking':
-            max_tokens = 3072
+            max_tokens = 8192
             temperature = 0.4
             mode_instruction = "Process this using chain-of-thought reasoning. Think through the problem out loud before providing the final answer."
 
@@ -422,4 +424,28 @@ def clear_history():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# Note: `app.run` removed so the app can be started by a WSGI server
+def create_admin():
+    try:
+        if db is None: return
+        admin_email = "admin@gmail.com"
+        if not db.users.find_one({"email": admin_email}):
+            now = datetime.now(timezone.utc)
+            db.users.insert_one({
+                "username": "Admin",
+                "email": admin_email,
+                "password": generate_password_hash("admin@123"),
+                "created_at": now,
+                "credits_last_reset": now,
+                "last_login": now,
+                "is_admin": True
+            })
+            print("✅ Admin user created: admin@gmail.com / admin@123")
+        else:
+            print("ℹ️ Admin user already exists")
+    except Exception as e:
+        print(f"❌ Error creating admin: {e}")
+
+if __name__ == "__main__":
+    create_admin()
+    print("🚀 EduWrite Backend running on http://127.0.0.1:5000")
+    app.run(debug=True, host='0.0.0.0', port=5000)

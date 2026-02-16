@@ -3,7 +3,6 @@ import api from '../api/axiosConfig';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Background3D from './Background3D';
-import CustomCursor from './CustomCursor';
 import LoadingIndicator from './LoadingIndicator';
 import FloatingActionButton from './FloatingActionButton';
 import DocumentModal from './DocumentModal';
@@ -212,7 +211,6 @@ const Dashboard = ({ user, onLogout }) => {
     return (
         <div className="dashboard-container">
             <Background3D />
-            <CustomCursor />
 
             {/* Mobile Navbar */}
             <div className="mobile-navbar">
@@ -231,6 +229,34 @@ const Dashboard = ({ user, onLogout }) => {
                         ⚙️
                     </button>
                 </div>
+            </div>
+
+            {/* Mobile Navigation Tabs */}
+            <div className="mobile-nav-tabs">
+                <button
+                    className={`mobile-tab ${activeTab === 'generator' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('generator')}
+                >
+                    Generator
+                </button>
+                <button
+                    className={`mobile-tab ${activeTab === 'history' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('history')}
+                >
+                    History
+                </button>
+                <button
+                    className={`mobile-tab ${activeTab === 'activity' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('activity')}
+                >
+                    Activity
+                </button>
+                <button
+                    className={`mobile-tab ${activeTab === 'about' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('about')}
+                >
+                    About
+                </button>
             </div>
 
             {/* Desktop Navbar */}

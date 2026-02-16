@@ -52,7 +52,7 @@
     border: none;
     color: var(--text-muted);
     font-size: 1.5rem;
-    cursor: none !important;
+    cursor: pointer;
 }
 
 .modal-form {
