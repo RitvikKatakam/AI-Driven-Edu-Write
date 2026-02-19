@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../api/axiosConfig';
 
 const Login = ({ onLoginSuccess }) => {
+    console.log("Login: component mounting...");
     const [error, setError] = useState(null);
     const [successMsg, setSuccessMsg] = useState(null);
     const [loading, setLoading] = useState(false);
