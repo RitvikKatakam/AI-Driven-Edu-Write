@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5001';
 
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
-  timeout: 10000,
+  timeout: 60000,
 });
 
 // Log all requests for debugging
