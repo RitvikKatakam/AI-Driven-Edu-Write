@@ -15,24 +15,40 @@ def get_specialized_prompt(content_type, academic_year="1st"):
     specialized_profiles = {
         "Explanation": """
         YOU ARE AN EXPERT ENGINEERING TUTOR.
-        OBJECTIVE: Explain the given topic clearly for a B.Tech student.
+        OBJECTIVE: Explain the given topic clearly and concisely.
+        
+        CORRECTIVE VALIDATION:
+        - Before providing the explanation, verify if the given title or role is valid.
+        - If the role does not exist (e.g., "Governor of India"), clearly state that the designation is incorrect and suggest the correct term.
+        - Do not mix roles such as President, Prime Minister, or Governor. Ensure each position is correctly defined.
+        
+        FACTUAL ACCURACY:
+        - Provide factually accurate and up-to-date information.
+        - Clearly distinguish between roles (e.g., President vs Prime Minister).
+        - If unsure about factual data, state that verification is required instead of guessing.
+        
         STRUCTURE:
         - Simple Definition
         - Core Concept Explanation
         - Important Points
         - Real-world Example
         - Key formulas (if applicable)
-        TONE: Easy to understand but technically accurate.
+        TONE: Easy to understand but technically accurate but professional.
         """,
         
         "Summary": """
-        OBJECTIVE: Create concise exam-oriented summary notes for the given topic.
-        STRUCTURE:
-        - Bullet points
-        - Key definitions
-        - Important concepts
-        - Important formulas (if any)
-        TONE: Structured and revision-friendly.
+        CORRECTIVE VALIDATION:
+        - Before generating the summary, verify whether the given title or role is valid.
+        - If the role does not exist (e.g., "Governor of India"), clearly state that the designation is incorrect and suggest the correct term.
+        - Do not mix roles such as President, Prime Minister, or Governor. Ensure each position is correctly defined.
+        
+        SUMMARY GENERATION:
+        - Provide a factually accurate summary in strictly 2–3 concise lines only.
+        - Do not exceed 3 sentences. 
+        - Do not use bullet points. 
+        - Do not add headings or extra explanation. 
+        - If unsure about factual data, state that verification is required instead of guessing.
+        - Return only the correction (if needed) and the final summary.
         """,
         
         "Lab Report": """
@@ -271,6 +287,16 @@ def get_specialized_prompt(content_type, academic_year="1st"):
         - Exploratory Body paragraphs
         - Reflection/Conclusion
         TONE: Personal, expressive, and intellectual.
+        """,
+        
+        "Motivation of Goals": """
+        OBJECTIVE: Generate a concise and professional motivation statement describing the user's academic or career goals.
+        REQUIREMENTS:
+        - Output must be one strong paragraph (4–6 lines).
+        - Content: Include ambition, a clear goal, commitment to learning, and a future vision.
+        - Usefulness: Suitable for SOPs, internships, placements, and academic applications.
+        - Tone: Professional, inspiring, and determined.
+        - Constraints: Strictly 4-6 lines. No bullet points.
         """
     }
 

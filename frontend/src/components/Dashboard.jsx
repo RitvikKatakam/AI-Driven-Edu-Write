@@ -64,7 +64,8 @@ const Dashboard = ({ user, onLogout }) => {
                 'Summary',
                 'Assignment',
                 'Viva Preparation',
-                'Lab Report'
+                'Lab Report',
+                'Motivation of Goals'
             ]
         },
         creative: {
@@ -96,7 +97,7 @@ const Dashboard = ({ user, onLogout }) => {
             label: 'Chat with PDF',
             icon: '📄',
             mode: 'pdf',
-            visibleFor: ['Explanation', 'Summary', 'Lab Report', 'Viva Prep', 'Revision Notes', 'Assignment', 'Formula Sheet', 'Quiz']
+            visibleFor: ['Explanation', 'Summary', 'Lab Report', 'Viva Prep', 'Revision Notes', 'Assignment', 'Formula Sheet', 'Quiz', 'Motivation of Goals']
         }
     ];
 
@@ -315,8 +316,8 @@ const Dashboard = ({ user, onLogout }) => {
                 }
             } else {
                 // Standard generation for non-PDF mode
-                const finalAcademicYear = academicYear === 'Other'
-                    ? (otherYearValue === 'Custom' ? customOtherYear : otherYearValue)
+                const finalAcademicYear = academicYear === 'Custom'
+                    ? customOtherYear
                     : academicYear;
 
                 const response = await api.post('/api/generate', {
@@ -506,7 +507,7 @@ const Dashboard = ({ user, onLogout }) => {
             </aside>
 
             {/* Main Content */}
-            < main className="main-content" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}>
+            <main className="main-content" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}>
                 <div className="tab-content-wrapper">
                     {activeTab === 'generator' ? (
                         <div className="generator-container">
@@ -906,18 +907,26 @@ const Dashboard = ({ user, onLogout }) => {
                             <div className="about-header">
                                 <h2 className="greeting-text">Hello, <span className="cyan-text">{user.name || user.email.split('@')[0]}!</span></h2>
                                 <h1>About <span className="cyan-text">Edu Write</span></h1>
+                                <p className="subtitle-brand">Groq AI</p>
                                 <p className="tagline">Transforming Education with <span className="purple-text">Intelligent Content Generation</span></p>
                             </div>
-                            <div className="about-content">
-                                <h2 className="section-title">Why Choose Edu Write?</h2>
-                                <div className="features-grid">
-                                    {aboutFeatures.map((feature, index) => (
-                                        <div key={index} className="feature-card">
-                                            <div className="feature-icon">{feature.icon}</div>
-                                            <div className="feature-info"><h3>{feature.title}</h3><p>{feature.description}</p></div>
-                                        </div>
-                                    ))}
+                            <h2 className="section-title">Why Choose Edu Write?</h2>
+                            <div className="features-grid">
+                                <div className="groq-branding-section feature-card">
+                                    <div className="feature-icon groq-logo-container">
+                                        <img src="/groq-logo.png" alt="Groq" className="groq-logo-img" />
+                                    </div>
+                                    <div className="feature-info">
+                                        <h3>Powered by Groq</h3>
+                                        <p className="groq-text">Built with Groq’s lightning-fast AI engine for academic assistance.</p>
+                                    </div>
                                 </div>
+                                {aboutFeatures.map((feature, index) => (
+                                    <div key={index} className="feature-card">
+                                        <div className="feature-icon">{feature.icon}</div>
+                                        <div className="feature-info"><h3>{feature.title}</h3><p>{feature.description}</p></div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ) : null}
@@ -1051,57 +1060,48 @@ const Dashboard = ({ user, onLogout }) => {
                         </div>
                     )
                 }
-            </main >
+            </main>
 
             {/* Right Sidebar */}
             <aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
                 <div className="sidebar-section">
-                    <h3 className="sidebar-label">ACADEMIC YEAR</h3>
-                    <div className="year-selector-grid">
-                        {['1st', '2nd', '3rd', '4th'].map(year => (
+                    <h3 className="sidebar-label">ACADEMIC LEVEL</h3>
+                    <div className="year-selector-grid-premium">
+                        {[
+                            { id: 'School Explorer', label: 'School Explorer', icon: '🏫' },
+                            { id: 'Undergraduate (College)', label: 'Undergraduate', icon: '🎓' },
+                            { id: 'Diploma Path', label: 'Diploma Path', icon: '🛠' },
+                            { id: 'Postgraduate (M.Tech / MBA / etc.)', label: 'Postgraduate', icon: '🎓' },
+                            { id: 'Drop Year', label: 'Drop Year', icon: '🔁' },
+                            { id: 'Alumni', label: 'Alumni', icon: '🏆' },
+                            { id: 'Custom', label: 'Custom', icon: '✍' }
+                        ].map(level => (
                             <button
-                                key={year}
-                                className={`year-btn ${academicYear === year ? 'active' : ''}`}
-                                onClick={() => setAcademicYear(year)}
+                                key={level.id}
+                                className={`level-btn-premium ${academicYear === level.id ? 'active' : ''}`}
+                                onClick={() => {
+                                    setAcademicYear(level.id);
+                                    if (level.id !== 'Custom') {
+                                        setCustomOtherYear('');
+                                    }
+                                }}
                             >
-                                {year}
+                                <span className="level-icon">{level.icon}</span>
+                                <span className="level-label">{level.label}</span>
                             </button>
                         ))}
                     </div>
 
-                    <div className="other-year-main-btn-wrapper">
-                        <button
-                            className={`year-btn ${academicYear === 'Other' ? 'active' : ''}`}
-                            onClick={() => setAcademicYear('Other')}
-                            style={{ width: '100%', marginTop: '10px' }}
-                        >
-                            Other
-                        </button>
-                    </div>
-
-                    {academicYear === 'Other' && (
-                        <div className="other-year-container">
-                            <div className="other-year-grid">
-                                {['Diploma', 'Postgraduate (M.Tech / MBA)', 'Drop Year', 'Alumni', 'Custom'].map(opt => (
-                                    <button
-                                        key={opt}
-                                        className={`other-sub-btn ${otherYearValue === opt ? 'active' : ''}`}
-                                        onClick={() => setOtherYearValue(opt)}
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                            {otherYearValue === 'Custom' && (
-                                <input
-                                    type="text"
-                                    className="custom-year-input"
-                                    placeholder="Specify your year/education..."
-                                    value={customOtherYear}
-                                    onChange={(e) => setCustomOtherYear(e.target.value)}
-                                    autoFocus
-                                />
-                            )}
+                    {academicYear === 'Custom' && (
+                        <div className="custom-level-container">
+                            <input
+                                type="text"
+                                className="custom-year-input"
+                                placeholder="Specify your level..."
+                                value={customOtherYear}
+                                onChange={(e) => setCustomOtherYear(e.target.value)}
+                                autoFocus
+                            />
                         </div>
                     )}
                 </div>
@@ -1145,7 +1145,7 @@ const Dashboard = ({ user, onLogout }) => {
                 onClose={() => setIsDocModalOpen(false)}
                 onSave={handleSaveDocument}
             />
-        </div >
+        </div>
     );
 };
 

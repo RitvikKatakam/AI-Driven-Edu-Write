@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_BACKEND_BASE_URL || 'http://localhost:5001';
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = isLocalhost
+  ? 'http://localhost:5001'
+  : (import.meta.env.VITE_BACKEND_BASE_URL || 'https://eduwrite-ai-2yni.vercel.app'); // Use env or fallback to a known production URL
 
 const api = axios.create({
   baseURL: API_BASE,
