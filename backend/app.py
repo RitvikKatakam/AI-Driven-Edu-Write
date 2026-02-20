@@ -5,6 +5,7 @@ from functools import wraps
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_caching import Cache
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
@@ -35,7 +36,6 @@ if not GROQ_API_KEY:
 app = Flask(__name__)
 
 # Enable CORS for all routes under /api/
-# This configuration allows cross-origin requests with credentials
 cors_config = {
     "origins": [
         "http://localhost:5173",
@@ -50,23 +50,38 @@ cors_config = {
     ],
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"],
-    "expose_headers": ["Content-Type"],
-    "max_age": 3600,
     "supports_credentials": True
 }
 
 CORS(app, resources={r"/api/*": cors_config})
 
-# Also handle OPTIONS requests at root level for preflight
-@app.before_request
-def handle_preflight():
-    if request.method == "OPTIONS":
-        response = jsonify({"status": "ok"})
-        response.headers.add("Access-Control-Allow-Origin", request.headers.get("Origin", "*"))
-        response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
-        return response, 200
+# =============================
+# CACHING CONFIG
+# =============================
+cache_config = {
+    "DEBUG": True,          # some Flask-Caching versions need this
+    "CACHE_TYPE": "SimpleCache", # In-memory cache
+    "CACHE_DEFAULT_TIMEOUT": 600 # 10 minutes
+}
+app.config.from_mapping(cache_config)
+cache = Cache(app)
+
+def make_cache_key():
+    """Custom cache key for POST requests with JSON body"""
+    if request.method == 'POST':
+        try:
+            data = request.get_json(silent=True) or request.form
+            # Create a unique key based on topic, content_type, and academic_year
+            key_parts = [
+                str(data.get('topic', '')),
+                str(data.get('content_type', 'Explanation')),
+                str(data.get('academic_year', '1st')),
+                str(data.get('mode', 'standard'))
+            ]
+            return ":".join(key_parts)
+        except:
+            return request.url
+    return request.url
 
 # =============================
 # MONGODB CONNECTION
@@ -130,6 +145,8 @@ def email_auth():
         else:
             return jsonify({"error": "Invalid password"}), 401
     
+    user_id = user["_id"]
+    
     # Record Login for stats
     db.logins.insert_one({"user_id": str(user_id), "email": email, "timestamp": now, "type": "login"})
 
@@ -170,6 +187,7 @@ def signup():
     }), 201
 
 @app.route('/api/generate', methods=['POST'])
+@cache.cached(timeout=600, make_cache_key=make_cache_key)
 def generate():
     # Attempt to get data from multiple sources
     data = request.get_json(silent=True) or request.form
@@ -235,14 +253,14 @@ def generate():
 
         # AI CALL
         from groq import Groq
-        client = Groq(api_key=GROQ_API_KEY)
+        groq_client = Groq(api_key=GROQ_API_KEY)
         sys_prompt = get_specialized_prompt(content_type, academic_year)
         
         # Inject mode instructions into system prompt
         if mode_instruction:
             sys_prompt = f"{sys_prompt}\n\nSPECIAL MODE ({mode.upper()}): {mode_instruction}"
 
-        completion = client.chat.completions.create(
+        completion = groq_client.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": sys_prompt},
@@ -346,9 +364,9 @@ Please answer the student's question based on the document provided. Focus on ex
         # AI CALL
         print(f"DEBUG: Calling Groq for question: {question[:50]}... Type: {content_type}")
         from groq import Groq
-        client = Groq(api_key=GROQ_API_KEY)
+        groq_client = Groq(api_key=GROQ_API_KEY)
         
-        completion = client.chat.completions.create(
+        completion = groq_client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": system_prompt},

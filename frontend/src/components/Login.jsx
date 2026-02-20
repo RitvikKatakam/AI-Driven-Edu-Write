@@ -30,7 +30,17 @@ const Login = ({ onLoginSuccess }) => {
                 setError('Authentication failed.');
             }
         } catch (err) {
-            setError(err.response?.data?.error || 'Failed to sign in.');
+            console.error("[Login Error]", {
+                message: err.message,
+                status: err.response?.status,
+                data: err.response?.data,
+                config: {
+                    url: err.config?.url,
+                    baseURL: err.config?.baseURL,
+                    method: err.config?.method
+                }
+            });
+            setError(err.response?.data?.error || 'Failed to sign in. Please check your connection.');
         } finally {
             setLoading(false);
         }
@@ -62,7 +72,12 @@ const Login = ({ onLoginSuccess }) => {
                 setConfirmPassword('');
             }
         } catch (err) {
-            setError(err.response?.data?.error || 'Failed to create account.');
+            console.error("[Signup Error]", {
+                message: err.message,
+                status: err.response?.status,
+                data: err.response?.data
+            });
+            setError(err.response?.data?.error || 'Failed to create account. Please check your connection.');
         } finally {
             setLoading(false);
         }
