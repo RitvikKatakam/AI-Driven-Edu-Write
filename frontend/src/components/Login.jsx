@@ -40,7 +40,7 @@ const Login = ({ onLoginSuccess }) => {
                     method: err.config?.method
                 }
             });
-            setError(err.response?.data?.error || 'Failed to sign in. Please check your connection.');
+            setError('Failed to sign in. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -77,7 +77,7 @@ const Login = ({ onLoginSuccess }) => {
                 status: err.response?.status,
                 data: err.response?.data
             });
-            setError(err.response?.data?.error || 'Failed to create account. Please check your connection.');
+            setError('Failed to create account. Please try again.');
         } finally {
             setLoading(false);
         }
