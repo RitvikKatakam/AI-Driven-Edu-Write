@@ -29,9 +29,6 @@ const Dashboard = ({ user, onLogout }) => {
     });
     const [typingId, setTypingId] = useState(null);
     const [displayContent, setDisplayContent] = useState({});
-    const [academicYear, setAcademicYear] = useState('1st');
-    const [otherYearValue, setOtherYearValue] = useState('Diploma');
-    const [customOtherYear, setCustomOtherYear] = useState('');
     const [selectedPdfForChat, setSelectedPdfForChat] = useState(null);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const pdfInputRef = useRef(null);
@@ -316,16 +313,11 @@ const Dashboard = ({ user, onLogout }) => {
                 }
             } else {
                 // Standard generation for non-PDF mode
-                const finalAcademicYear = academicYear === 'Custom'
-                    ? customOtherYear
-                    : academicYear;
-
                 const response = await api.post('/api/generate', {
                     topic: currentInput,
                     content_type: currentType,
                     user_id: user.id || user.email,
-                    mode: aiMode,
-                    academic_year: finalAcademicYear
+                    mode: aiMode
                 });
 
                 if (response.data.content) {
@@ -1064,48 +1056,6 @@ const Dashboard = ({ user, onLogout }) => {
 
             {/* Right Sidebar */}
             <aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
-                <div className="sidebar-section">
-                    <h3 className="sidebar-label">ACADEMIC LEVEL</h3>
-                    <div className="year-selector-grid-premium">
-                        {[
-                            { id: 'School Explorer', label: 'School Explorer', icon: '🏫' },
-                            { id: 'Undergraduate (College)', label: 'Undergraduate', icon: '🎓' },
-                            { id: 'Diploma Path', label: 'Diploma Path', icon: '🛠' },
-                            { id: 'Postgraduate (M.Tech / MBA / etc.)', label: 'Postgraduate', icon: '🎓' },
-                            { id: 'Drop Year', label: 'Drop Year', icon: '🔁' },
-                            { id: 'Alumni', label: 'Alumni', icon: '🏆' },
-                            { id: 'Custom', label: 'Custom', icon: '✍' }
-                        ].map(level => (
-                            <button
-                                key={level.id}
-                                className={`level-btn-premium ${academicYear === level.id ? 'active' : ''}`}
-                                onClick={() => {
-                                    setAcademicYear(level.id);
-                                    if (level.id !== 'Custom') {
-                                        setCustomOtherYear('');
-                                    }
-                                }}
-                            >
-                                <span className="level-icon">{level.icon}</span>
-                                <span className="level-label">{level.label}</span>
-                            </button>
-                        ))}
-                    </div>
-
-                    {academicYear === 'Custom' && (
-                        <div className="custom-level-container">
-                            <input
-                                type="text"
-                                className="custom-year-input"
-                                placeholder="Specify your level..."
-                                value={customOtherYear}
-                                onChange={(e) => setCustomOtherYear(e.target.value)}
-                                autoFocus
-                            />
-                        </div>
-                    )}
-                </div>
-
                 <div className="sidebar-section">
                     <h3 className="sidebar-label">CONTENT TYPES</h3>
                     {Object.entries(categorizedContentTypes).map(([key, category]) => (
