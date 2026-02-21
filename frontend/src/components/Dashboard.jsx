@@ -355,7 +355,7 @@ const Dashboard = ({ user, onLogout }) => {
         } catch (error) {
             console.error('Generation error:', error);
             const errorData = error.response?.data;
-            let errorMsg = errorData?.error || error.message || "Failed to generate content";
+            let errorMsg = errorData?.error || "Failed to generate content. Please try again.";
 
             // Special handling for history full error
             if (errorData?.history_full) {
