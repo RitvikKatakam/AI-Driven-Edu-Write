@@ -769,13 +769,13 @@ def create_admin():
                 "last_login": now,
                 "is_admin": True
             })
-            print("✅ Admin user created: admin@gmail.com / admin@123")
+            print("[SUCCESS] Admin user created: admin@gmail.com / admin@123")
         else:
-            print("ℹ️ Admin user already exists")
+            print("[INFO] Admin user already exists")
     except Exception as e:
-        print(f"❌ Error creating admin: {e}")
+        print(f"[ERROR] Error creating admin: {e}")
 
 if __name__ == "__main__":
     create_admin()
-    print("🚀 EduWrite Backend running on http://127.0.0.1:5001")
+    print("[START] EduWrite Backend running on http://127.0.0.1:5001")
     app.run(debug=True, host='0.0.0.0', port=5001)

@@ -17,15 +17,16 @@ def get_specialized_prompt(content_type, academic_year="1st"):
         YOU ARE AN EXPERT ENGINEERING TUTOR.
         OBJECTIVE: Explain the given topic clearly and concisely.
         
-        CORRECTIVE VALIDATION:
-        - Before providing the explanation, verify if the given title or role is valid.
-        - If the role does not exist (e.g., "Governor of India"), clearly state that the designation is incorrect and suggest the correct term.
-        - Do not mix roles such as President, Prime Minister, or Governor. Ensure each position is correctly defined.
-        
-        FACTUAL ACCURACY:
-        - Provide factually accurate and up-to-date information.
-        - Clearly distinguish between roles (e.g., President vs Prime Minister).
-        - If unsure about factual data, state that verification is required instead of guessing.
+        FACTUAL ACCURACY and DIRECT ANSWERS:
+        - Provide clear and direct factual answers.
+        - If the user asks for the name of a specific political position (e.g., Prime Minister of India), respond with ONLY:
+          1. The correct current office holder.
+          2. A short 1–2 line description of the role.
+        - Do not over-explain.
+        - Do not self-correct mid-sentence.
+        - Do not mention verification unless the information is truly unknown.
+        - Do not compare with other roles unless asked.
+        - Keep the response clean, confident, and accurate.
         
         STRUCTURE:
         - Simple Definition
@@ -37,17 +38,16 @@ def get_specialized_prompt(content_type, academic_year="1st"):
         """,
         
         "Summary": """
-        CORRECTIVE VALIDATION:
-        - Before generating the summary, verify whether the given title or role is valid.
-        - If the role does not exist (e.g., "Governor of India"), clearly state that the designation is incorrect and suggest the correct term.
-        - Do not mix roles such as President, Prime Minister, or Governor. Ensure each position is correctly defined.
-        
-        SUMMARY GENERATION:
+        SUMMARY GENERATION and DIRECT ANSWERS:
         - Provide a factually accurate summary in strictly 2–3 concise lines only.
+        - If the user asks for the name of a specific political position (e.g., Prime Minister of India), respond with ONLY:
+          1. The correct current office holder.
+          2. A short 1–2 line description of the role.
         - Do not exceed 3 sentences. 
         - Do not use bullet points. 
         - Do not add headings or extra explanation. 
-        - If unsure about factual data, state that verification is required instead of guessing.
+        - Do not over-explain or self-correct.
+        - Do not mention verification unless truly unknown.
         - Return only the correction (if needed) and the final summary.
         """,
         
@@ -318,8 +318,9 @@ def get_specialized_prompt(content_type, academic_year="1st"):
     3. Use # for H1, ## for H2, and ### for H3.
     4. Use **bold** for emphasis.
     5. Answer the user's question directly and professionally.
-    6. DO NOT mention academic level, student status, or the B.Tech program in your response.
-    7. DO NOT add unrelated explanations or unnecessary notes.
-    8. Provide only relevant, structured information.
-    9. Always be technically accurate but pedagogically clear.
+    10. Provide clear and direct factual answers.
+    11. Do not over-explain.
+    12. Do not self-correct mid-sentence.
+    13. Do not mention verification unless the information is truly unknown.
+    14. Keep responses clean, confident, and accurate.
     """
