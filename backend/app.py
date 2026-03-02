@@ -210,7 +210,9 @@ def generate():
             if filename.endswith('.pdf'):
                 pdf_reader = PyPDF2.PdfReader(BytesIO(file.read()))
                 for page in pdf_reader.pages:
-                    extracted_text += page.extract_text() + "\n"
+                    text = page.extract_text()
+                    if text:
+                        extracted_text += text + "\n"
             elif filename.endswith('.txt'):
                 extracted_text = file.read().decode('utf-8')
             
@@ -330,7 +332,9 @@ def pdf_chat():
             if filename.endswith('.pdf'):
                 pdf_reader = PyPDF2.PdfReader(BytesIO(file.read()))
                 for page in pdf_reader.pages:
-                    extracted_text += page.extract_text() + "\n"
+                    text = page.extract_text()
+                    if text:
+                        extracted_text += text + "\n"
                     if len(extracted_text) > 10000:
                         break
             else:

@@ -6,7 +6,7 @@ import Background3D from './Background3D';
 import LoadingIndicator from './LoadingIndicator';
 import FloatingActionButton from './FloatingActionButton';
 import DocumentModal from './DocumentModal';
-import { LogOut, BarChart2, Users, Activity as ActivityIcon, TrendingUp, ChevronDown } from 'lucide-react';
+import { LogOut, BarChart2, Users, Activity as ActivityIcon, TrendingUp, ChevronDown, Copy, Download, Check } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area, BarChart, Bar } from 'recharts';
 
 const Dashboard = ({ user, onLogout }) => {
@@ -62,6 +62,9 @@ const Dashboard = ({ user, onLogout }) => {
                 'Assignment',
                 'Viva Preparation',
                 'Lab Report',
+                'Revision Notes',
+                'Formula Sheet',
+                'Quiz',
                 'Motivation of Goals'
             ]
         },
@@ -73,7 +76,7 @@ const Dashboard = ({ user, onLogout }) => {
         technical: {
             label: "Technical",
             icon: "💻",
-            types: ['Coding', 'Debugging', 'Algorithm Breakdown', 'Project Documentation', 'Project Ideas']
+            types: ['Coding', 'Debugging', 'Algorithm Breakdown', 'Project Documentation', 'Project Ideas', 'Research Paper']
         },
         placement: {
             label: "Placement",
@@ -94,7 +97,7 @@ const Dashboard = ({ user, onLogout }) => {
             label: 'Chat with PDF',
             icon: '📄',
             mode: 'pdf',
-            visibleFor: ['Explanation', 'Summary', 'Lab Report', 'Viva Prep', 'Revision Notes', 'Assignment', 'Formula Sheet', 'Quiz', 'Motivation of Goals']
+            visibleFor: ['Explanation', 'Summary', 'Lab Report', 'Viva Preparation', 'Revision Notes', 'Assignment', 'Formula Sheet', 'Quiz', 'Motivation of Goals']
         }
     ];
 
@@ -473,6 +476,14 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
 
                 <div className="nav-right">
+                    <div className="user-pill">
+                        <div className="user-avatar">
+                            {(user.name || user.email)[0].toUpperCase()}
+                        </div>
+                        <span className="user-name">
+                            {user.name ? user.name.split(' ')[0] : user.email.split('@')[0]}
+                        </span>
+                    </div>
                     <button className="logout-button" onClick={onLogout}>
                         <span className="logout-icon">🚪</span>
                         Logout
@@ -602,6 +613,37 @@ const Dashboard = ({ user, onLogout }) => {
                                         }}>
                                             <div className="history-card-header">
                                                 <span className="type-badge">{item.content_type}</span>
+                                                <div className="history-card-actions">
+                                                    <button
+                                                        className="action-btn-sm"
+                                                        title="Copy Content"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            navigator.clipboard.writeText(item.response);
+                                                            // Optional: Show a brief success state
+                                                        }}
+                                                    >
+                                                        <Copy size={14} />
+                                                    </button>
+                                                    <button
+                                                        className="action-btn-sm"
+                                                        title="Download .md"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const blob = new Blob([item.response], { type: 'text/markdown' });
+                                                            const url = URL.createObjectURL(blob);
+                                                            const link = document.createElement('a');
+                                                            link.href = url;
+                                                            link.download = `${(item.topic || 'eduwrite_content').replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md`;
+                                                            document.body.appendChild(link);
+                                                            link.click();
+                                                            document.body.removeChild(link);
+                                                            URL.revokeObjectURL(url);
+                                                        }}
+                                                    >
+                                                        <Download size={14} />
+                                                    </button>
+                                                </div>
                                                 <span className="history-card-date">{new Date(item.created_at).toLocaleDateString()}</span>
                                             </div>
                                             <div className="history-card-topic">{item.topic}</div>
