@@ -1103,6 +1103,7 @@ const Dashboard = ({ user, onLogout }) => {
                                         {isGenerating ? <div className="loader-small"></div> : <span className="send-icon">→</span>}
                                     </button>
                                 </form>
+                                <p className="footer-note">EduWrite can make mistakes. Check important info. <span>Done By Ai Student</span></p>
                             </div>
                         </div>
                     )
