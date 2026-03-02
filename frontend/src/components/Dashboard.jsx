@@ -278,17 +278,19 @@ const Dashboard = ({ user, onLogout }) => {
                 formData.append('user_id', user.id || user.email);
 
                 formData.append('content_type', currentType);
+                const aiMsgId = Date.now() + 1;
 
                 const response = await api.post('/api/pdf-chat', formData);
 
                 if (response.data.content) {
-                    const aiMsgId = Date.now() + 1;
                     const aiMsg = {
                         id: aiMsgId,
                         type: 'ai',
                         content: response.data.content,
                         contentType: currentType,
-                        topic: currentInput
+                        topic: currentInput,
+                        isPdf: true,
+                        fileName: selectedPdfForChat.name
                     };
                     setChatMessages(prev => [...prev, aiMsg]);
 
@@ -474,12 +476,12 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
 
                 <div className="nav-right">
-                    <div className="user-pill">
-                        <div className="user-avatar">
-                            {(user.name || user.email)[0].toUpperCase()}
+                    <div className="user-pill student-profile">
+                        <div className="user-avatar student-avatar">
+                            <span className="icon-student">👤</span>
                         </div>
-                        <span className="user-name">
-                            {user.name ? user.name.split(' ')[0] : user.email.split('@')[0]}
+                        <span className="user-name student-text">
+                            name of student
                         </span>
                     </div>
                     <button className="logout-button" onClick={onLogout}>
@@ -550,6 +552,12 @@ const Dashboard = ({ user, onLogout }) => {
                                                     <div className="ai-message-wrapper">
                                                         <div className="ai-avatar-circle">🤖</div>
                                                         <div className="response-display chat-ai-response">
+                                                            {msg.isPdf && (
+                                                                <div className="pdf-attachment-tag">
+                                                                    <span className="pdf-icon-sm">📄</span>
+                                                                    <span className="pdf-tag-text">{msg.fileName || 'document.pdf'}</span>
+                                                                </div>
+                                                            )}
                                                             <div className="response-header">
                                                                 <span className="type-badge">{msg.contentType}</span>
                                                                 <h3 className="topic-title">{msg.topic}</h3>
