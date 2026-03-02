@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from functools import wraps
 
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_caching import Cache
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -50,7 +50,7 @@ cors_config = {
         "https://stunning-enigma-qwvg6x9wv5gc99pr-5173.app.github.dev"
     ],
     "methods": ["GET", "POST", "OPTIONS"],
-    "allow_headers": ["Content-Type", "Authorization"],
+    "allow_headers": ["*"],
     "supports_credentials": True
 }
 
@@ -308,6 +308,7 @@ def generate():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/pdf-chat', methods=['POST'])
+@cross_origin()
 def pdf_chat():
     """
     Handle PDF chat requests - extracts text from PDF and answers questions about it

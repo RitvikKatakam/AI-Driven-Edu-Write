@@ -279,9 +279,7 @@ const Dashboard = ({ user, onLogout }) => {
 
                 formData.append('content_type', currentType);
 
-                const response = await api.post('/api/pdf-chat', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
+                const response = await api.post('/api/pdf-chat', formData);
 
                 if (response.data.content) {
                     const aiMsgId = Date.now() + 1;
