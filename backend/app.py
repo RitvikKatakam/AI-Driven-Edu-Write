@@ -38,17 +38,7 @@ app = Flask(__name__)
 
 # Enable CORS for all routes under /api/
 cors_config = {
-    "origins": [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5001",
-        "http://127.0.0.1:5001",
-        "https://ai-driven-edu-write.vercel.app",
-        "https://eduwrite-ai-2yni.vercel.app",
-        "https://eduwrite-ai-2yni-6u0k2trk1-ritvikkatakams-projects.vercel.app",
-        "https://edu-write-ai--ismartgamer703.replit.app",
-        "https://stunning-enigma-qwvg6x9wv5gc99pr-5173.app.github.dev"
-    ],
+    "origins": "*",  # Allow all origins for easier local network usage
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["*"],
     "supports_credentials": True
@@ -308,7 +298,7 @@ def generate():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/pdf-chat', methods=['POST'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def pdf_chat():
     """
     Handle PDF chat requests - extracts text from PDF and answers questions about it

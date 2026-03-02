@@ -139,7 +139,9 @@ const Dashboard = ({ user, onLogout }) => {
                         type: 'ai',
                         content: item.response,
                         contentType: item.content_type,
-                        topic: item.topic
+                        topic: item.topic,
+                        isPdf: item.had_file,
+                        fileName: item.pdf_name
                     });
 
                     displayContentMap[aiMsgId] = item.response;
@@ -364,7 +366,7 @@ const Dashboard = ({ user, onLogout }) => {
                 if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
                     errorMsg = "The request timed out. The server might be starting up or busy. Please try again in 30 seconds.";
                 } else if (!error.response) {
-                    errorMsg = "Connection lost. Please check your internet or ensure the backend is running.";
+                    errorMsg = "Connection lost. Please check your internet or ensure the backend is running on port 5001.";
                 } else {
                     errorMsg = "Failed to generate content. Please try again.";
                 }
@@ -481,7 +483,7 @@ const Dashboard = ({ user, onLogout }) => {
                             <span className="icon-student">👤</span>
                         </div>
                         <span className="user-name student-text">
-                            name of student
+                            {user?.name || user?.email?.split('@')[0] || 'Student'}
                         </span>
                     </div>
                     <button className="logout-button" onClick={onLogout}>

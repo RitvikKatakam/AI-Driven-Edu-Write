@@ -1,11 +1,13 @@
 import axios from 'axios';
 
 const hostname = window.location.hostname;
-const isLocalNetwork = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.');
+const isLocalNetwork = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.') || hostname.startsWith('172.');
 
 const API_BASE = isLocalNetwork
   ? `http://${hostname}:5001`
-  : (import.meta.env.VITE_BACKEND_BASE_URL || 'https://edu-write-ai--ismartgamer703.replit.app'); // Use env or fallback to your backend URL (NOT your Vercel frontend URL)
+  : (import.meta.env.VITE_BACKEND_BASE_URL || 'https://edu-write-ai--ismartgamer703.replit.app');
+
+console.log(`[AXIOS] Initializing with API_BASE: ${API_BASE} (isLocalNetwork: ${isLocalNetwork})`);
 
 const api = axios.create({
   baseURL: API_BASE,
