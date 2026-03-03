@@ -143,14 +143,18 @@ with st.sidebar:
     # Document uploader
     uploaded_file = st.file_uploader(
         "Upload a document",
-        type=["pdf"],
-        help="Upload a PDF file to analyze its content"
+        type=["pdf", "txt"],
+        help="Upload a PDF or TXT file to analyze its content"
     )
 
     if uploaded_file is not None:
-        # Process PDF
+        # Process file
         with st.spinner("Extracting text from document..."):
-            st.session_state.pdf_text = extract_text_from_pdf(uploaded_file)
+            if uploaded_file.name.lower().endswith('.pdf'):
+                st.session_state.pdf_text = extract_text_from_pdf(uploaded_file)
+            else:
+                st.session_state.pdf_text = uploaded_file.read().decode('utf-8')
+            
             st.session_state.pdf_name = uploaded_file.name
             st.session_state.active_resource = {
                 "type": "document",

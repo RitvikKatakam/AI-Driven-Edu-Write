@@ -95,9 +95,10 @@ const Dashboard = ({ user, onLogout }) => {
         { label: 'Deep Research', icon: '🔬', mode: 'deep' },
         { label: 'Thinking Mode', icon: '💡', mode: 'thinking' },
         {
-            label: 'Chat with PDF',
+            label: 'Chat with PDF/TXT',
             icon: '📄',
             mode: 'pdf',
+            label_detail: '(Up to 200MB)',
             visibleFor: ['Explanation', 'Summary', 'Lab Report', 'Viva Preparation', 'Revision Notes', 'Assignment', 'Formula Sheet', 'Quiz', 'Motivation of Goals']
         }
     ];
@@ -1064,6 +1065,7 @@ const Dashboard = ({ user, onLogout }) => {
                                                         >
                                                             <span className="action-icon">{item.icon}</span>
                                                             <span className="action-label">{item.label}</span>
+                                                            {item.label_detail && <span className="action-detail" style={{ fontSize: '10px', opacity: 0.7, marginLeft: '4px' }}>{item.label_detail}</span>}
                                                             {aiMode === item.mode && item.mode !== 'upload' && <span className="active-dot"></span>}
                                                         </div>
                                                     ))}
@@ -1108,7 +1110,7 @@ const Dashboard = ({ user, onLogout }) => {
                                                     color: '#888',
                                                     marginTop: '2px'
                                                 }}>
-                                                    PDF
+                                                    PDF/TXT (Max 200MB)
                                                 </div>
                                             </div>
                                             <button
@@ -1138,7 +1140,7 @@ const Dashboard = ({ user, onLogout }) => {
                                     <input
                                         ref={pdfInputRef}
                                         type="file"
-                                        accept=".pdf"
+                                        accept=".pdf,.txt"
                                         onChange={handlePdfFileSelect}
                                         style={{ display: 'none' }}
                                     />
@@ -1158,13 +1160,13 @@ const Dashboard = ({ user, onLogout }) => {
                                 </form>
                                 <p className="footer-note">EduWrite can make mistakes. Check important info. <span>Done By Ai Student</span></p>
                             </div>
-                        </div>
+                        </div >
                     )
                 }
-            </main>
+            </main >
 
             {/* Right Sidebar */}
-            <aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
+            < aside className={`right-bar ${isRightBarOpen ? 'open' : ''}`}>
                 <div className="sidebar-section">
                     <h3 className="sidebar-label">CONTENT TYPES</h3>
                     {Object.entries(categorizedContentTypes).map(([key, category]) => (
@@ -1195,7 +1197,7 @@ const Dashboard = ({ user, onLogout }) => {
                         </div>
                     ))}
                 </div>
-            </aside>
+            </aside >
 
             {(isSidebarOpen || isRightBarOpen) && <div className="mobile-overlay" onClick={() => { setIsSidebarOpen(false); setIsRightBarOpen(false); }}></div>}
 
@@ -1204,7 +1206,7 @@ const Dashboard = ({ user, onLogout }) => {
                 onClose={() => setIsDocModalOpen(false)}
                 onSave={handleSaveDocument}
             />
-        </div>
+        </div >
     );
 };
 

@@ -35,6 +35,7 @@ if not GROQ_API_KEY:
 # FLASK APP
 # =============================
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024 # 200 MB limit
 
 # Enable CORS for all routes under /api/
 cors_config = {
@@ -325,8 +326,8 @@ def pdf_chat():
         if not file or not question or not user_id_raw:
             return jsonify({"error": "Missing file, question, or user_id"}), 400
         
-        # Extract PDF text
-        print(f"DEBUG: Starting PDF extraction for {file.filename}")
+        # Extract PDF/TXT text
+        print(f"DEBUG: Starting extraction for {file.filename}")
         extracted_text = ""
         try:
             filename = file.filename.lower()
@@ -338,14 +339,18 @@ def pdf_chat():
                         extracted_text += text + "\n"
                     if len(extracted_text) > 10000:
                         break
+            elif filename.endswith('.txt'):
+                extracted_text = file.read().decode('utf-8')
+                if len(extracted_text) > 10000:
+                    extracted_text = extracted_text[:10000]
             else:
-                return jsonify({"error": "Only PDF files are supported"}), 400
+                return jsonify({"error": "Only PDF and TXT files are supported"}), 400
             
             if not extracted_text:
-                return jsonify({"error": "Could not extract text from PDF"}), 400
+                return jsonify({"error": "Could not extract text from file"}), 400
         except Exception as fe:
-            print(f"PDF Extract Error: {fe}")
-            return jsonify({"error": f"Error processing PDF: {str(fe)}"}), 400
+            print(f"File Extract Error: {fe}")
+            return jsonify({"error": f"Error processing file: {str(fe)}"}), 400
         
         # Resolve User
         u_id = ObjectId(user_id_raw) if len(user_id_raw) == 24 and all(c in '0123456789abcdef' for c in user_id_raw.lower()) else None
