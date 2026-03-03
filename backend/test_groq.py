@@ -4,17 +4,30 @@ from dotenv import load_dotenv
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
-print(f"API Key found: {bool(api_key)}")
 
 if api_key:
     try:
         client = Groq(api_key=api_key)
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": "test"}],
-            max_tokens=10
+            model="openai/gpt-oss-120b",
+            messages=[
+              {
+                "role": "user",
+                "content": "Why is the sky blue?"
+              }
+            ],
+            temperature=1,
+            max_completion_tokens=8192,
+            top_p=1,
+            reasoning_effort="medium",
+            stream=True,
+            stop=None
         )
-        print("Groq Test Success")
+
+        print("Response: ", end="")
+        for chunk in completion:
+            print(chunk.choices[0].delta.content or "", end="")
+        print("\nGroq Test Success")
     except Exception as e:
         print(f"Groq Test Failed: {e}")
 else:

@@ -32,6 +32,7 @@ const Dashboard = ({ user, onLogout }) => {
     const [selectedPdfForChat, setSelectedPdfForChat] = useState(null);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const pdfInputRef = useRef(null);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
@@ -253,6 +254,13 @@ const Dashboard = ({ user, onLogout }) => {
             scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
         }
     };
+
+    // Keep focus on input
+    useEffect(() => {
+        if (activeTab === 'generator' && !isGenerating && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [activeTab, isGenerating, contentType, chatMessages.length]);
 
 
 
@@ -529,14 +537,50 @@ const Dashboard = ({ user, onLogout }) => {
                             <div className="response-scroll-area">
                                 {chatMessages.length === 0 ? (
                                     <div className="welcome-center">
-                                        <h2>Welcome, <span>{user.name || user.email.split('@')[0]}</span></h2>
-                                        <p>Ask anything to generate <span className="cyan-text">{contentType}</span> with AI</p>
-                                        <div className="suggestion-chips">
-                                            {['Write a short story', 'Solve a math problem', 'Explain Quantum Physics', 'Create a study plan'].map(suggestion => (
-                                                <button key={suggestion} className="suggestion-chip" onClick={() => { setInputText(suggestion); }}>
-                                                    {suggestion}
-                                                </button>
-                                            ))}
+                                        <div className="welcome-hero">
+                                            <div className="welcome-badge">AI ASSISTANT</div>
+                                            <h2>Welcome back, <span className="cyan-text">{user?.name || user?.email?.split('@')[0]}!</span></h2>
+                                            <p className="welcome-subtitle">What would you like to create today? Select a category or start typing.</p>
+                                        </div>
+
+                                        <div className="welcome-sections-grid">
+                                            <div className="welcome-section">
+                                                <h4><span className="welcome-icon">🎓</span> Academic</h4>
+                                                <div className="suggestion-chips">
+                                                    {['Explain Quantum Physics', 'Revision notes for Java', 'Assignment on AI Ethics'].map(suggestion => (
+                                                        <button key={suggestion} className="suggestion-chip" onClick={() => setInputText(suggestion)}>
+                                                            {suggestion}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="welcome-section">
+                                                <h4><span className="welcome-icon">💻</span> Technical</h4>
+                                                <div className="suggestion-chips">
+                                                    {['Code a React component', 'Debug my Python script', 'Project ideas for Web Dev'].map(suggestion => (
+                                                        <button key={suggestion} className="suggestion-chip" onClick={() => setInputText(suggestion)}>
+                                                            {suggestion}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="welcome-section">
+                                                <h4><span className="welcome-icon">✨</span> Creative</h4>
+                                                <div className="suggestion-chips">
+                                                    {['Write a short story', 'Creative essay on Mars', 'Social media script'].map(suggestion => (
+                                                        <button key={suggestion} className="suggestion-chip" onClick={() => setInputText(suggestion)}>
+                                                            {suggestion}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="welcome-status-pill">
+                                            <span className="pulse-dot"></span>
+                                            Ready to help with {contentType}
                                         </div>
                                     </div>
                                 ) : (
@@ -1100,6 +1144,7 @@ const Dashboard = ({ user, onLogout }) => {
                                     />
 
                                     <input
+                                        ref={inputRef}
                                         type="text"
                                         className="chat-input"
                                         placeholder={`Ask about something for ${contentType}...`}
