@@ -9,6 +9,70 @@ import DocumentModal from './DocumentModal';
 import { LogOut, BarChart2, Users, Activity as ActivityIcon, TrendingUp, ChevronDown, Copy, Download, Check } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area, BarChart, Bar } from 'recharts';
 
+const CodeBlock = ({ className, children, ...props }) => {
+    const [copied, setCopied] = useState(false);
+    const code = String(children).replace(/\n$/, '');
+    const match = /language-(\w+)/.exec(className || '');
+    const language = match ? match[1] : '';
+    const isInline = !className || !className.includes('language-');
+
+    const handleCopy = (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    if (isInline) {
+        return <code className={className} {...props}>{children}</code>;
+    }
+
+    return (
+        <div className="code-block-wrapper" style={{ position: 'relative' }}>
+            <div className="code-header-flex" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+            }}>
+                <span className="code-lang-tag" style={{
+                    fontSize: '10px',
+                    fontWeight: '700',
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                }}>{language || 'code'}</span>
+                <button
+                    type="button"
+                    className={`copy-code-btn-new ${copied ? 'success' : ''}`}
+                    onClick={handleCopy}
+                    style={{
+                        background: 'none',
+                        border: 'none',
+                        color: copied ? '#4ade80' : 'var(--accent-cyan)',
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    {copied ? <><Check size={12} /> Copied!</> : <><Copy size={12} /> Copy Code</>}
+                </button>
+            </div>
+            <pre style={{ margin: 0, padding: '12px' }}>
+                <code className={className} {...props}>
+                    {children}
+                </code>
+            </pre>
+        </div >
+    );
+};
+
 const Dashboard = ({ user, onLogout }) => {
     const [inputText, setInputText] = useState('');
     const [aiMode, setAiMode] = useState('standard');
@@ -610,7 +674,12 @@ const Dashboard = ({ user, onLogout }) => {
                                                                 <h3 className="topic-title">{msg.topic}</h3>
                                                             </div>
                                                             <div className="response-body markdown-content">
-                                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                <ReactMarkdown
+                                                                    remarkPlugins={[remarkGfm]}
+                                                                    components={{
+                                                                        code: CodeBlock
+                                                                    }}
+                                                                >
                                                                     {displayContent[msg.id] || msg.content}
                                                                 </ReactMarkdown>
                                                                 {typingId === msg.id && <span className="typing-cursor">|</span>}
