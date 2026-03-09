@@ -28,48 +28,23 @@ const CodeBlock = ({ className, children, ...props }) => {
     }
 
     return (
-        <div className="code-block-wrapper" style={{ position: 'relative' }}>
-            <div className="code-header-flex" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '8px 12px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-            }}>
-                <span className="code-lang-tag" style={{
-                    fontSize: '10px',
-                    fontWeight: '700',
-                    color: 'var(--text-muted)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                }}>{language || 'code'}</span>
+        <div className="code-block-wrapper">
+            <div className="code-header-flex">
+                <span className="code-lang-tag">{language || 'code'}</span>
                 <button
                     type="button"
                     className={`copy-code-btn-new ${copied ? 'success' : ''}`}
                     onClick={handleCopy}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        color: copied ? '#4ade80' : 'var(--accent-cyan)',
-                        fontSize: '11px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        transition: 'all 0.2s'
-                    }}
                 >
                     {copied ? <><Check size={12} /> Copied!</> : <><Copy size={12} /> Copy Code</>}
                 </button>
             </div>
-            <pre style={{ margin: 0, padding: '12px' }}>
+            <pre style={{ margin: 0 }}>
                 <code className={className} {...props}>
                     {children}
                 </code>
             </pre>
-        </div >
+        </div>
     );
 };
 
@@ -387,7 +362,7 @@ const Dashboard = ({ user, onLogout }) => {
                         }
                     }, 1);
 
-                    fetchHistory();
+                    // fetchHistory(); // Removed to prevent race condition: the local update is sufficient and syncs with DB.
                 }
             } else {
                 // Standard generation for non-PDF mode
@@ -426,7 +401,7 @@ const Dashboard = ({ user, onLogout }) => {
                         }
                     }, 5); // Fast typing speed
 
-                    fetchHistory(); // Refresh history
+                    // fetchHistory(); // Removed to prevent race condition: the local update is sufficient and syncs with DB.
                 }
             }
 
@@ -436,10 +411,10 @@ const Dashboard = ({ user, onLogout }) => {
             let errorMsg = errorData?.error;
 
             if (!errorMsg) {
-                if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-                    errorMsg = "The request timed out. The server might be starting up or busy. Please try again in 30 seconds.";
+                if (error.code === 'ECONNABORTED' || error.message?.includes('timeout') || error.message?.includes('Network Error')) {
+                    errorMsg = "We apologize for the inconvenience. The request has timed out as the server may currently be busy or initializing. Kindly try again after a short while.";
                 } else if (!error.response) {
-                    errorMsg = "Connection lost. Please check your internet or ensure the backend is running on port 5001.";
+                    errorMsg = "We apologize for the inconvenience. The request has timed out as the server may currently be busy or initializing. Kindly try again after a short while.";
                 } else {
                     errorMsg = "Failed to generate content. Please try again.";
                 }

@@ -40,7 +40,14 @@ const Login = ({ onLoginSuccess }) => {
                     method: err.config?.method
                 }
             });
-            const errorMsg = err.response?.data?.error || 'Failed to sign in. Please try again.';
+            let errorMsg = err.response?.data?.error;
+            if (!errorMsg) {
+                if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message?.includes('Network Error') || !err.response) {
+                    errorMsg = "We apologize for the inconvenience. The request has timed out as the server may currently be busy or initializing. Kindly try again after a short while.";
+                } else {
+                    errorMsg = 'Failed to sign in. Please try again.';
+                }
+            }
             setError(errorMsg);
         } finally {
             setLoading(false);
@@ -78,7 +85,14 @@ const Login = ({ onLoginSuccess }) => {
                 status: err.response?.status,
                 data: err.response?.data
             });
-            const errorMsg = err.response?.data?.error || 'Failed to create account. Please try again.';
+            let errorMsg = err.response?.data?.error;
+            if (!errorMsg) {
+                if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message?.includes('Network Error') || !err.response) {
+                    errorMsg = "We apologize for the inconvenience. The request has timed out as the server may currently be busy or initializing. Kindly try again after a short while.";
+                } else {
+                    errorMsg = 'Failed to create account. Please try again.';
+                }
+            }
             setError(errorMsg);
         } finally {
             setLoading(false);

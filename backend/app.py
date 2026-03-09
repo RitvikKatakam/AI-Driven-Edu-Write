@@ -204,6 +204,18 @@ def generate():
     if not topic or not user_id_raw:
         return jsonify({"error": "Missing data"}), 400
 
+    # Closing Message Detection
+    closing_messages = ["ok", "okay", "ok thank you", "thank you", "thanks"]
+    clean_topic = topic.strip().lower().replace(".", "").replace("!", "")
+    if clean_topic in closing_messages:
+        return jsonify({
+            "status": "success",
+            "id": f"closing-{datetime.now().timestamp()}",
+            "content": "You're welcome! I'm glad I could help. If you need anything else, feel free to ask.",
+            "topic": topic,
+            "content_type": content_type
+        }), 200
+
     extracted_text = ""
     if file:
         try:
@@ -326,6 +338,18 @@ def pdf_chat():
         if not file or not question or not user_id_raw:
             return jsonify({"error": "Missing file, question, or user_id"}), 400
         
+        # Closing Message Detection
+        closing_messages = ["ok", "okay", "ok thank you", "thank you", "thanks"]
+        clean_question = question.strip().lower().replace(".", "").replace("!", "")
+        if clean_question in closing_messages:
+            return jsonify({
+                "status": "success",
+                "id": f"closing-{datetime.now().timestamp()}",
+                "content": "You're welcome! I'm glad I could help. If you need anything else, feel free to ask.",
+                "topic": question,
+                "content_type": content_type
+            }), 200
+
         # Extract PDF/TXT text
         print(f"DEBUG: Starting extraction for {file.filename}")
         extracted_text = ""
@@ -481,7 +505,7 @@ def get_history():
         
         if not user: return jsonify({"status": "success", "history": []})
         
-        history = list(db.history.find({"user_id": str(user["_id"])}).sort("created_at", -1).limit(50))
+        history = list(db.history.find({"user_id": str(user["_id"])}).sort("created_at", -1).limit(1000))
         for item in history:
             item["id"] = str(item["_id"])
             del item["_id"]
