@@ -6,7 +6,7 @@ import Background3D from './Background3D';
 import LoadingIndicator from './LoadingIndicator';
 import FloatingActionButton from './FloatingActionButton';
 import DocumentModal from './DocumentModal';
-import { LogOut, BarChart2, Users, Activity as ActivityIcon, TrendingUp, ChevronDown, Copy, Download, Check } from 'lucide-react';
+import { LogOut, BarChart2, Users, Activity as ActivityIcon, TrendingUp, ChevronDown, Copy, Download, Check, Trash2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area, BarChart, Bar } from 'recharts';
 
 const CodeBlock = ({ className, children, ...props }) => {
@@ -201,6 +201,20 @@ const Dashboard = ({ user, onLogout }) => {
         } catch (error) { console.error('Error fetching documents:', error); }
     };
 
+    const handleDeleteHistoryItem = async (e, itemId) => {
+        e.stopPropagation();
+        if (!window.confirm("Are you sure you want to delete this item?")) return;
+        try {
+            const response = await api.delete(`/api/history/delete-item/${itemId}`);
+            if (response.data.status === 'success') {
+                setHistoryItems(prev => prev.filter(item => item.id !== itemId));
+                // Optional: if it's the current chat, we could also clear it.
+            }
+        } catch (error) {
+            console.error('Error deleting history item:', error);
+        }
+    };
+
     useEffect(() => {
         if (user) {
             fetchHistory();
@@ -362,7 +376,7 @@ const Dashboard = ({ user, onLogout }) => {
                         }
                     }, 1);
 
-                    // fetchHistory(); // Removed to prevent race condition: the local update is sufficient and syncs with DB.
+                    fetchHistory();
                 }
             } else {
                 // Standard generation for non-PDF mode
@@ -401,7 +415,7 @@ const Dashboard = ({ user, onLogout }) => {
                         }
                     }, 5); // Fast typing speed
 
-                    // fetchHistory(); // Removed to prevent race condition: the local update is sufficient and syncs with DB.
+                    fetchHistory();
                 }
             }
 
@@ -561,6 +575,13 @@ const Dashboard = ({ user, onLogout }) => {
                             }}>
                                 <span className="icon">📜</span>
                                 <span className="history-text">{item.topic || item.title}</span>
+                                <button
+                                    className="delete-history-sidebar-btn"
+                                    onClick={(e) => handleDeleteHistoryItem(e, item.id)}
+                                    title="Delete"
+                                >
+                                    <Trash2 size={12} />
+                                </button>
                             </div>
                         )) : (
                             <div className="history-item empty">No history yet</div>
@@ -739,6 +760,14 @@ const Dashboard = ({ user, onLogout }) => {
                                                         }}
                                                     >
                                                         <Download size={14} />
+                                                    </button>
+                                                    <button
+                                                        className="action-btn-sm"
+                                                        title="Delete"
+                                                        onClick={(e) => handleDeleteHistoryItem(e, item.id)}
+                                                        style={{ color: '#ff4d4d' }}
+                                                    >
+                                                        <Trash2 size={14} />
                                                     </button>
                                                 </div>
                                                 <span className="history-card-date">{new Date(item.created_at).toLocaleDateString()}</span>

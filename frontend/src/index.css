@@ -1523,6 +1523,39 @@ canvas {
   box-shadow: 0 10px 20px rgba(0, 210, 255, 0.1);
 }
 
+.delete-history-sidebar-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  opacity: 0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.history-item:hover .delete-history-sidebar-btn {
+  opacity: 1;
+}
+
+.delete-history-sidebar-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.action-btn-sm.delete-btn {
+    color: #f87171;
+}
+
+.action-btn-sm.delete-btn:hover {
+    background: rgba(248, 113, 113, 0.1);
+    color: #ef4444;
+}
+
 .history-card-header {
   display: flex;
   justify-content: space-between;

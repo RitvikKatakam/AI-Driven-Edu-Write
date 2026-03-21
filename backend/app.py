@@ -50,7 +50,7 @@ cors_config = {
         "https://edu-write-ai--ismartgamer703.replit.app",
         "https://stunning-enigma-qwvg6x9wv5gc99pr-5173.app.github.dev"
     ],
-    "methods": ["GET", "POST", "OPTIONS"],
+    "methods": ["GET", "POST", "OPTIONS", "DELETE"],
     "allow_headers": ["*"],
     "supports_credentials": True
 }
@@ -251,7 +251,7 @@ def generate():
         # AI Parameters based on Mode
         max_tokens = 8192
         temperature = 0.2
-        model = "llama-3.3-70b-versatile"
+        model = "openai/gpt-oss-120b"
         mode_instruction = ""
         
         if mode == 'telescope':
@@ -297,8 +297,9 @@ def generate():
                 {"role": "system", "content": sys_prompt},
                 {"role": "user", "content": topic}
             ],
-            temperature=temperature,
-            max_tokens=max_tokens,
+            temperature=1,
+            max_completion_tokens=8192,
+            reasoning_effort="medium",
             stream=False
         )
         
@@ -417,13 +418,14 @@ Please answer the student's question based on the document provided. Focus on ex
         groq_client = Groq(api_key=GROQ_API_KEY)
         
         completion = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": f"DOCUMENT CONTENT:\n{extracted_text[:9000]}\n\nUSER QUESTION: {question}"}
             ],
-            temperature=0.3,
-            max_tokens=2048,
+            temperature=1,
+            max_completion_tokens=8192,
+            reasoning_effort="medium",
             stream=False
         )
         
@@ -803,6 +805,23 @@ def clear_history():
         return jsonify({"status": "success", "deleted_count": total_deleted}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+@app.route('/api/history/delete-item/<item_id>', methods=['DELETE', 'OPTIONS'])
+@cross_origin(supports_credentials=True)
+def delete_history_item(item_id):
+    if request.method == 'OPTIONS':
+        return jsonify({"status": "ok"}), 200
+    
+    try:
+        # Try both ObjectId and string if necessary, but history _id is usually ObjectId
+        result = db.history.delete_one({"_id": ObjectId(item_id)})
+        if result.deleted_count > 0:
+            return jsonify({"status": "success", "message": "Item deleted"}), 200
+        else:
+            return jsonify({"error": "Item not found"}), 404
+    except Exception as e:
+        print(f"Delete Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 def create_admin():
     try:
